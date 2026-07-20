@@ -18,6 +18,7 @@ with app.app_context():
             name="Admin",
             email="admin@gmail.com",
             password="admin123",
+            contact="9999999999",
             role="Admin",
             status="Active"
         )

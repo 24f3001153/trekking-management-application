@@ -1,6 +1,5 @@
 from app import db
-from datetime import datetime
-
+from datetime import datetime, timezone
 
 class User(db.Model):
 
@@ -18,7 +17,11 @@ class User(db.Model):
         db.String(100),
         nullable=False
     )
-
+    contact = db.Column(
+        db.String(15),
+        nullable=False
+    )
+ 
     role = db.Column(
         db.String(20),
         nullable=False
@@ -35,6 +38,10 @@ class User(db.Model):
         backref="user"
     )
 
+    created_at = db.Column(
+        db.DateTime,
+        default=lambda: datetime.now(timezone.utc)
+    )
 
 
 class StaffProfile(db.Model):
@@ -54,11 +61,6 @@ class StaffProfile(db.Model):
         "User",
         backref="staff_profile"
     )
-
-    contact = db.Column(
-        db.String(15)
-    )
-
 
     approval_status = db.Column(
         db.String(20),
@@ -82,22 +84,26 @@ class Trek(db.Model):
 
 
     location = db.Column(
-        db.String(100)
+        db.String(100),
+        nullable=False
     )
 
 
     difficulty = db.Column(
-        db.String(20)
+        db.String(20),
+        nullable=False
     )
 
 
     duration = db.Column(
-        db.Integer
+        db.Integer,
+        nullable=False
     )
 
 
     available_slots = db.Column(
-        db.Integer
+        db.Integer,
+        nullable=False
     )
 
 
@@ -156,7 +162,7 @@ class Booking(db.Model):
 
     booking_date = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=lambda: datetime.now(timezone.utc)
     )
 
 
