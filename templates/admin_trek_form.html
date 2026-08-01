@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ 'Edit Trek' if trek else 'Add Trek' }}</title>
+</head>
+<body>
+
+    <h1>{{ 'Edit Trek' if trek else 'Add New Trek' }}</h1>
+
+    <form method="POST">
+
+        <label>Trek Name:</label>
+        <input type="text" name="trek_name" value="{{ trek.trek_name if trek else '' }}" required>
+        <br><br>
+
+        <label>Location:</label>
+        <input type="text" name="location" value="{{ trek.location if trek else '' }}" required>
+        <br><br>
+
+        <label>Difficulty:</label>
+        <select name="difficulty" required>
+            <option value="Easy" {% if trek and trek.difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+            <option value="Moderate" {% if trek and trek.difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
+            <option value="Hard" {% if trek and trek.difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+        </select>
+        <br><br>
+
+        <label>Duration (days):</label>
+        <input type="number" name="duration" value="{{ trek.duration if trek else '' }}" required>
+        <br><br>
+
+        <label>Available Slots:</label>
+        <input type="number" name="available_slots" value="{{ trek.available_slots if trek else '' }}" required>
+        <br><br>
+
+        {% if trek %}
+        <label>Status:</label>
+        <select name="status" required>
+            <option value="Pending" {% if trek.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Approved" {% if trek.status == 'Approved' %}selected{% endif %}>Approved</option>
+            <option value="Open" {% if trek.status == 'Open' %}selected{% endif %}>Open</option>
+            <option value="Closed" {% if trek.status == 'Closed' %}selected{% endif %}>Closed</option>
+            <option value="Completed" {% if trek.status == 'Completed' %}selected{% endif %}>Completed</option>
+        </select>
+        <br><br>
+        {% endif %}
+
+        <button type="submit">Save</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('admin_treks') }}">Back to Treks</a>
+
+</body>
+</html>

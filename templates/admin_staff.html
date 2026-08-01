@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Staff</title>
+</head>
+<body>
+
+    <h1>Manage Trek Staff</h1>
+
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Staff ID</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Approval Status</th>
+            <th>Account Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for staff in staff_profiles %}
+        <tr>
+            <td>{{ staff.id }}</td>
+            <td>{{ staff.user.name }}</td>
+            <td>{{ staff.user.contact }}</td>
+            <td>{{ staff.approval_status }}</td>
+            <td>{{ staff.user.status }}</td>
+            <td>
+                {% if staff.approval_status != 'Approved' %}
+                <a href="{{ url_for('admin_approve_staff', staff_id=staff.id) }}">Approve</a> |
+                {% endif %}
+
+                {% if staff.user.status != 'Blacklisted' %}
+                <a href="{{ url_for('admin_blacklist_staff', staff_id=staff.id) }}">Blacklist</a> |
+                {% endif %}
+
+                <a href="{{ url_for('admin_delete_staff', staff_id=staff.id) }}">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>

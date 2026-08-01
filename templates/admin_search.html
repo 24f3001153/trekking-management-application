@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+
+    <h1>Search Results for "{{ query }}" ({{ results_type }})</h1>
+
+    <form method="GET" action="{{ url_for('admin_search') }}">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search by name or ID">
+        <select name="type">
+            <option value="trek" {% if results_type == 'trek' %}selected{% endif %}>Trek</option>
+            <option value="staff" {% if results_type == 'staff' %}selected{% endif %}>Staff</option>
+            <option value="user" {% if results_type == 'user' %}selected{% endif %}>User</option>
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    <br>
+
+    {% if not results %}
+        <p>No results found.</p>
+    {% else %}
+        <ul>
+        {% for item in results %}
+            {% if results_type == 'trek' %}
+                <li>ID {{ item.id }} - {{ item.trek_name }} ({{ item.location }}, {{ item.status }})</li>
+            {% elif results_type == 'staff' %}
+                <li>Staff ID {{ item.id }} - {{ item.user.name }} ({{ item.approval_status }})</li>
+            {% elif results_type == 'user' %}
+                <li>User ID {{ item.id }} - {{ item.name }} ({{ item.status }})</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>

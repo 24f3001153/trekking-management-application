@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Treks</title>
+</head>
+<body>
+
+    <h1>Manage Treks</h1>
+
+    <a href="{{ url_for('admin_add_trek') }}">+ Add New Trek</a>
+    <br><br>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Difficulty</th>
+            <th>Duration</th>
+            <th>Slots</th>
+            <th>Status</th>
+            <th>Assigned Staff</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for trek in treks %}
+        <tr>
+            <td>{{ trek.id }}</td>
+            <td>{{ trek.trek_name }}</td>
+            <td>{{ trek.location }}</td>
+            <td>{{ trek.difficulty }}</td>
+            <td>{{ trek.duration }}</td>
+            <td>{{ trek.available_slots }}</td>
+            <td>{{ trek.status }}</td>
+            <td>
+                {% if trek.assigned_staff %}
+                    {{ trek.assigned_staff.user.name }}
+                {% else %}
+                    Unassigned
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('admin_edit_trek', trek_id=trek.id) }}">Edit</a> |
+                <a href="{{ url_for('admin_assign_staff', trek_id=trek.id) }}">Assign Staff</a>
+                {% if trek.assigned_staff %}
+                | <a href="{{ url_for('admin_unassign_staff', trek_id=trek.id) }}">Unassign</a>
+                {% endif %}
+                | <a href="{{ url_for('admin_delete_trek', trek_id=trek.id) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>

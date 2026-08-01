@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assign Staff</title>
+</head>
+<body>
+
+    <h1>Assign Staff to: {{ trek.trek_name }}</h1>
+
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <label>Select Staff:</label>
+        <select name="staff_id" required>
+            {% for staff in staff_list %}
+            <option value="{{ staff.id }}"
+                {% if trek.assigned_staff_id == staff.id %}selected{% endif %}>
+                {{ staff.user.name }} (ID: {{ staff.id }})
+            </option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <button type="submit">Assign</button>
+    </form>
+
+    {% if not staff_list %}
+    <p>No approved staff available. Approve staff first.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('admin_treks') }}">Back to Treks</a>
+
+</body>
+</html>

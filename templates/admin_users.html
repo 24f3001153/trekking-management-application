@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Users</title>
+</head>
+<body>
+
+    <h1>Manage Users</h1>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.contact }}</td>
+            <td>{{ user.status }}</td>
+            <td>
+                {% if user.status != 'Blacklisted' %}
+                <a href="{{ url_for('admin_blacklist_user', user_id=user.id) }}">Blacklist</a> |
+                {% else %}
+                <a href="{{ url_for('admin_activate_user', user_id=user.id) }}">Activate</a> |
+                {% endif %}
+
+                <a href="{{ url_for('admin_bookings', user_id=user.id) }}">View History</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>
