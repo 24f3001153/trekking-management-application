@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trek Participants</title>
+</head>
+<body>
+
+    <h1>Participants for: {{ trek.trek_name }}</h1>
+
+    {% if not bookings %}
+        <p>No bookings for this trek yet.</p>
+    {% else %}
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Booking Date</th>
+            <th>Status</th>
+            <th>Payment Status</th>
+        </tr>
+
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.user.name }}</td>
+            <td>{{ booking.user.contact }}</td>
+            <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ booking.status }}</td>
+            <td>{{ booking.payment_status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('staff_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>

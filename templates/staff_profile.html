@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+</head>
+<body>
+
+    <h1>Edit Profile</h1>
+
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <label>Name:</label>
+        <input type="text" name="name" value="{{ user.name }}" required>
+        <br><br>
+
+        <label>Email:</label>
+        <input type="email" value="{{ user.email }}" disabled>
+        <br><br>
+
+        <label>Contact:</label>
+        <input type="tel" name="contact" value="{{ user.contact }}" required>
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('staff_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>

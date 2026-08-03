@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Trek</title>
+</head>
+<body>
+
+    <h1>Manage Trek: {{ trek.trek_name }}</h1>
+
+    <p>Location: {{ trek.location }}</p>
+    <p>Difficulty: {{ trek.difficulty }}</p>
+    <p>Duration: {{ trek.duration }} days</p>
+
+    <form method="POST">
+
+        <label>Available Slots:</label>
+        <input type="number" name="available_slots" value="{{ trek.available_slots }}" min="0" required>
+        <br><br>
+
+        <label>Status:</label>
+        <select name="status" required>
+            <option value="Open" {% if trek.status == 'Open' %}selected{% endif %}>Open</option>
+            <option value="Closed" {% if trek.status == 'Closed' %}selected{% endif %}>Closed</option>
+            <option value="Ongoing" {% if trek.status == 'Ongoing' %}selected{% endif %}>Ongoing</option>
+            <option value="Completed" {% if trek.status == 'Completed' %}selected{% endif %}>Completed</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+
+    <h2>Currently Registered Trekkers ({{ bookings|length }})</h2>
+
+    {% if not bookings %}
+        <p>No one has booked this trek yet.</p>
+    {% else %}
+    <ul>
+        {% for booking in bookings %}
+        <li>{{ booking.user.name }} - {{ booking.user.contact }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('staff_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>

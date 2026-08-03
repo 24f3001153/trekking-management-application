@@ -482,8 +482,115 @@ def staff_dashboard():
     if session.get("role") != "Staff":
         return redirect(url_for("login"))
 
+    staff = StaffProfile.query.filter_by(
+        user_id=session["user_id"]
+    ).first()
+
+    assigned_treks = Trek.query.filter_by(
+        assigned_staff_id=staff.id
+    ).all()
+
+    trek_data = []
+
+    for trek in assigned_treks:
+        registered_count = Booking.query.filter_by(
+            trek_id=trek.id,
+            status="Booked"
+        ).count()
+
+        trek_data.append({
+            "trek": trek,
+            "registered_count": registered_count
+        })
+
     return render_template(
-        "staff_dashboard.html"
+        "staff_dashboard.html",
+        trek_data=trek_data,
+        staff=staff
+    )
+
+
+@app.route("/staff/profile", methods=['GET', 'POST'])
+def staff_profile():
+
+    if session.get("role") != "Staff":
+        return redirect(url_for("login"))
+
+    user = User.query.get(session["user_id"])
+
+    if request.method == 'POST':
+
+        user.name = request.form['name']
+        user.contact = request.form['contact']
+
+        db.session.commit()
+
+        return render_template(
+            "staff_profile.html",
+            user=user,
+            message="Profile updated successfully"
+        )
+
+    return render_template("staff_profile.html", user=user)
+
+
+@app.route("/staff/treks/<int:trek_id>", methods=['GET', 'POST'])
+def staff_manage_trek(trek_id):
+
+    if session.get("role") != "Staff":
+        return redirect(url_for("login"))
+
+    staff = StaffProfile.query.filter_by(
+        user_id=session["user_id"]
+    ).first()
+
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.assigned_staff_id != staff.id:
+        return "You are not assigned to manage this trek", 403
+
+    if request.method == 'POST':
+
+        trek.available_slots = request.form['available_slots']
+        trek.status = request.form['status']
+
+        db.session.commit()
+
+        return redirect(url_for("staff_dashboard"))
+
+    bookings = Booking.query.filter_by(
+        trek_id=trek.id,
+        status="Booked"
+    ).all()
+
+    return render_template(
+        "staff_trek_manage.html",
+        trek=trek,
+        bookings=bookings
+    )
+
+
+@app.route("/staff/treks/<int:trek_id>/participants")
+def staff_view_participants(trek_id):
+
+    if session.get("role") != "Staff":
+        return redirect(url_for("login"))
+
+    staff = StaffProfile.query.filter_by(
+        user_id=session["user_id"]
+    ).first()
+
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.assigned_staff_id != staff.id:
+        return "You are not assigned to manage this trek", 403
+
+    bookings = Booking.query.filter_by(trek_id=trek.id).all()
+
+    return render_template(
+        "staff_participants.html",
+        trek=trek,
+        bookings=bookings
     )
 
 
