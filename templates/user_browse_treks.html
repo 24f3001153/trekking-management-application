@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browse Treks</title>
+</head>
+<body>
+
+    <h1>Available Treks</h1>
+
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="GET" action="{{ url_for('user_browse_treks') }}">
+
+        <label>Difficulty:</label>
+        <select name="difficulty">
+            <option value="">All</option>
+            <option value="Easy" {% if difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+            <option value="Moderate" {% if difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
+            <option value="Hard" {% if difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+        </select>
+
+        <label>Location:</label>
+        <input type="text" name="location" value="{{ location }}" placeholder="Location">
+
+        <button type="submit">Filter</button>
+        <a href="{{ url_for('user_browse_treks') }}">Clear</a>
+    </form>
+
+    <br>
+
+    {% if not treks %}
+        <p>No open treks match your filters right now.</p>
+    {% else %}
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Trek Name</th>
+            <th>Location</th>
+            <th>Difficulty</th>
+            <th>Duration</th>
+            <th>Available Slots</th>
+            <th>Start Date</th>
+            <th>Action</th>
+        </tr>
+
+        {% for trek in treks %}
+        <tr>
+            <td>{{ trek.trek_name }}</td>
+            <td>{{ trek.location }}</td>
+            <td>{{ trek.difficulty }}</td>
+            <td>{{ trek.duration }} days</td>
+            <td>{{ trek.available_slots }}</td>
+            <td>{{ trek.start_date if trek.start_date else '-' }}</td>
+            <td>
+                {% if trek.available_slots > 0 %}
+                <a href="{{ url_for('user_book_trek', trek_id=trek.id) }}">Book</a>
+                {% else %}
+                Full
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('user_dashboard') }}">Back to Dashboard</a>
+
+</body>
+</html>

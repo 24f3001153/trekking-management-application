@@ -1,4 +1,43 @@
-<h1>User Dashboard</h1>
-<p>Welcome Trekker</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+</head>
+<body>
 
-<a href="{{ url_for('logout') }}">Logout</a>
+    <h1>Trekker Dashboard</h1>
+    <p>Welcome {{ user.name }}</p>
+
+    <a href="{{ url_for('user_browse_treks') }}">Browse Treks</a> |
+    <a href="{{ url_for('user_bookings') }}">My Bookings</a> |
+    <a href="{{ url_for('user_profile') }}">Edit Profile</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <br><br>
+
+    <h2>Currently Booked Treks</h2>
+
+    {% if not active_bookings %}
+        <p>You have no active bookings.</p>
+    {% else %}
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Trek</th>
+            <th>Location</th>
+            <th>Trek Status</th>
+            <th>Booking Date</th>
+        </tr>
+
+        {% for booking in active_bookings %}
+        <tr>
+            <td>{{ booking.trek.trek_name }}</td>
+            <td>{{ booking.trek.location }}</td>
+            <td>{{ booking.trek.status }}</td>
+            <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+</body>
+</html>

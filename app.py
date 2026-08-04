@@ -474,7 +474,7 @@ def admin_search():
     )
 
 
-# ---------- STAFF & USER DASHBOARDS ----------
+# STAFF DASHBOARD
 
 @app.route("/staff")
 def staff_dashboard():
@@ -593,16 +593,166 @@ def staff_view_participants(trek_id):
         bookings=bookings
     )
 
-
+# USER DASHBOARD 
 @app.route("/user")
 def user_dashboard():
 
     if session.get("role") != "Trekker":
         return redirect(url_for("login"))
 
+    user = User.query.get(session["user_id"])
+
+    active_bookings = Booking.query.filter_by(
+        user_id=user.id,
+        status="Booked"
+    ).all()
+
     return render_template(
-        "user_dashboard.html"
+        "user_dashboard.html",
+        user=user,
+        active_bookings=active_bookings
     )
+
+@app.route("/user/profile", methods=['GET', 'POST'])
+def user_profile():
+
+    if session.get("role") != "Trekker":
+        return redirect(url_for("login"))
+
+    user = User.query.get(session["user_id"])
+
+    if request.method == 'POST':
+
+        user.name = request.form['name']
+        user.contact = request.form['contact']
+
+        db.session.commit()
+
+        return render_template(
+            "user_profile.html",
+            user=user,
+            message="Profile updated successfully"
+        )
+
+    return render_template("user_profile.html", user=user)
+
+
+@app.route("/user/treks")
+def user_browse_treks():
+
+    if session.get("role") != "Trekker":
+        return redirect(url_for("login"))
+
+    difficulty = request.args.get('difficulty', '')
+    location = request.args.get('location', '')
+
+    query = Trek.query.filter_by(status="Open")
+
+    if difficulty:
+        query = query.filter_by(difficulty=difficulty)
+
+    if location:
+        query = query.filter(Trek.location.ilike(f"%{location}%"))
+
+    treks = query.all()
+
+    return render_template(
+        "user_browse_treks.html",
+        treks=treks,
+        difficulty=difficulty,
+        location=location
+    )
+
+
+@app.route("/user/treks/book/<int:trek_id>")
+def user_book_trek(trek_id):
+
+    if session.get("role") != "Trekker":
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.status != "Open":
+        return render_template(
+            "user_browse_treks.html",
+            treks=Trek.query.filter_by(status="Open").all(),
+            difficulty='',
+            location='',
+            error="This trek is not open for booking."
+        )
+
+    if trek.available_slots <= 0:
+        return render_template(
+            "user_browse_treks.html",
+            treks=Trek.query.filter_by(status="Open").all(),
+            difficulty='',
+            location='',
+            error="No slots available for this trek."
+        )
+
+    existing_booking = Booking.query.filter_by(
+        user_id=user_id,
+        trek_id=trek.id,
+        status="Booked"
+    ).first()
+
+    if existing_booking:
+        return render_template(
+            "user_browse_treks.html",
+            treks=Trek.query.filter_by(status="Open").all(),
+            difficulty='',
+            location='',
+            error="You have already booked this trek."
+        )
+
+    new_booking = Booking(
+        user_id=user_id,
+        trek_id=trek.id,
+        status="Booked"
+    )
+
+    trek.available_slots -= 1
+
+    db.session.add(new_booking)
+    db.session.commit()
+
+    return redirect(url_for("user_bookings"))
+
+
+@app.route("/user/bookings")
+def user_bookings():
+
+    if session.get("role") != "Trekker":
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+
+    bookings = Booking.query.filter_by(
+        user_id=user_id
+    ).order_by(Booking.booking_date.desc()).all()
+
+    return render_template("user_bookings.html", bookings=bookings)
+
+
+@app.route("/user/bookings/cancel/<int:booking_id>")
+def user_cancel_booking(booking_id):
+
+    if session.get("role") != "Trekker":
+        return redirect(url_for("login"))
+
+    booking = Booking.query.get_or_404(booking_id)
+
+    if booking.user_id != session["user_id"]:
+        return "You cannot cancel this booking", 403
+
+    if booking.status == "Booked":
+        booking.status = "Cancelled"
+        booking.trek.available_slots += 1
+        db.session.commit()
+
+    return redirect(url_for("user_bookings"))
 
 
 @app.route("/logout")
