@@ -554,6 +554,16 @@ def staff_manage_trek(trek_id):
         trek.available_slots = request.form['available_slots']
         trek.status = request.form['status']
 
+        if trek.status == "Completed":
+
+            active_bookings = Booking.query.filter_by(
+                trek_id=trek.id,
+                status="Booked"
+            ).all()
+
+            for booking in active_bookings:
+                booking.status = "Completed"
+
         db.session.commit()
 
         return redirect(url_for("staff_dashboard"))

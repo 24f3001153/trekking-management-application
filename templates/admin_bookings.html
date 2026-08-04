@@ -18,9 +18,14 @@
 
     <br>
 
+    {% if filter_user_id and not bookings %}
+    <p>No bookings found for User ID {{ filter_user_id }}.</p>
+    {% else %}
+
     <table border="1" cellpadding="6">
         <tr>
             <th>Booking ID</th>
+            <th>User ID</th>
             <th>User</th>
             <th>Trek</th>
             <th>Booking Date</th>
@@ -31,6 +36,7 @@
         {% for booking in bookings %}
         <tr>
             <td>{{ booking.id }}</td>
+            <td>{{ booking.user.id }}</td>
             <td>{{ booking.user.name }}</td>
             <td>{{ booking.trek.trek_name }}</td>
             <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
@@ -39,6 +45,7 @@
         </tr>
         {% endfor %}
     </table>
+     {% endif %}
 
     <br>
     <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
