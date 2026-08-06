@@ -21,8 +21,16 @@ from models import *
 
 
 @app.route("/")
-def home():
-    return "Trekking Management Application"
+def index():
+    if session.get("role") == "Admin":
+        return redirect(url_for("admin_dashboard"))
+    elif session.get("role") == "Staff":
+        return redirect(url_for("staff_dashboard"))
+    elif session.get("role") == "Trekker":
+        return redirect(url_for("user_dashboard"))
+
+    return redirect(url_for("login"))
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
