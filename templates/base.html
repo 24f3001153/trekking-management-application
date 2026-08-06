@@ -14,10 +14,10 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-<a class="navbar-brand" href="{{ url_for('index') }}">Trekking Management</a>
+<a class="navbar-brand" href="{{ url_for('index') }}">&#x26F0; Trekking Management Application</a>
             {% if session.get('role') %}
-            <div class="d-flex">
-                <span class="navbar-text text-light me-3">
+            <div class="d-flex align-items-center">
+                <span class="text-light me-3">
                     Role: {{ session.get('role') }}
                 </span>
                 <a class="btn btn-outline-light btn-sm" href="{{ url_for('logout') }}">Logout</a>
