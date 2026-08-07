@@ -1,50 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Manage Trek</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Manage Trek: {{ trek.trek_name }}</h1>
+{% block title %}Manage Trek{% endblock %}
 
-    <p>Location: {{ trek.location }}</p>
-    <p>Difficulty: {{ trek.difficulty }}</p>
-    <p>Duration: {{ trek.duration }} days</p>
+{% block content %}
 
-    <form method="POST">
+    <h2 class="mb-3">Manage Trek: {{ trek.trek_name }}</h2>
 
-        <label>Available Slots:</label>
-        <input type="number" name="available_slots" value="{{ trek.available_slots }}" min="0" required>
-        <br><br>
+    <p class="mb-1"><strong>Location:</strong> {{ trek.location }}</p>
+    <p class="mb-1"><strong>Difficulty:</strong> {{ trek.difficulty }}</p>
+    <p class="mb-4"><strong>Duration:</strong> {{ trek.duration }} days</p>
 
-        <label>Status:</label>
-        <select name="status" required>
-            <option value="Open" {% if trek.status == 'Open' %}selected{% endif %}>Open</option>
-            <option value="Closed" {% if trek.status == 'Closed' %}selected{% endif %}>Closed</option>
-            <option value="Ongoing" {% if trek.status == 'Ongoing' %}selected{% endif %}>Ongoing</option>
-            <option value="Completed" {% if trek.status == 'Completed' %}selected{% endif %}>Completed</option>
-        </select>
-        <br><br>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card p-4">
+            <form method="POST">
 
-        <button type="submit">Save Changes</button>
-    </form>
+                <div class="mb-3">
+                    <label class="form-label">Available Slots</label>
+                    <input type="number" name="available_slots" class="form-control" value="{{ trek.available_slots }}" min="0" required>
+                </div>
 
-    <br>
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" required>
+                        <option value="Open" {% if trek.status == 'Open' %}selected{% endif %}>Open</option>
+                        <option value="Closed" {% if trek.status == 'Closed' %}selected{% endif %}>Closed</option>
+                        <option value="Ongoing" {% if trek.status == 'Ongoing' %}selected{% endif %}>Ongoing</option>
+                        <option value="Completed" {% if trek.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
 
-    <h2>Currently Registered Trekkers ({{ bookings|length }})</h2>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+        </div>
+    </div>
+
+    <h3 class="mt-5 mb-3">Currently Registered Trekkers ({{ bookings|length }})</h3>
 
     {% if not bookings %}
-        <p>No one has booked this trek yet.</p>
+    <div class="card p-2 mb-4">
+        <p class="text-muted mb-0">No one has booked this trek yet.</p>
+    </div>
     {% else %}
-    <ul>
+    <ul class="list-group">
         {% for booking in bookings %}
-        <li>{{ booking.user.name }} - {{ booking.user.contact }}</li>
+        <li class="list-group-item">{{ booking.user.name }} - {{ booking.user.contact }}</li>
         {% endfor %}
     </ul>
     {% endif %}
 
-    <br>
-    <a href="{{ url_for('staff_dashboard') }}">Back to Dashboard</a>
+    <p class="mt-4">
+        <a href="{{ url_for('staff_dashboard') }}">← Back to Dashboard</a>
+    </p>
 
-</body>
-</html>
+{% endblock %}

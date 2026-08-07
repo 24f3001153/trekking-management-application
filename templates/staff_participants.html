@@ -1,16 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Trek Participants</title>
-</head>
-<body>
+{% extends "base.html" %}
+ 
+{% block title %}Trek Participants{% endblock %}
+ 
+{% block content %}
 
-    <h1>Participants for: {{ trek.trek_name }}</h1>
+    <h2 class="mb-4">Participants for: {{ trek.trek_name }}</h2>
 
     {% if not bookings %}
-        <p>No bookings for this trek yet.</p>
+    <div class="card p-2 mb-4">
+        <p class="text-muted mb-0">No bookings for this trek yet.</p>
+        </div>
     {% else %}
-    <table border="1" cellpadding="6">
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+        <thead>
         <tr>
             <th>Name</th>
             <th>Contact</th>
@@ -18,7 +21,8 @@
             <th>Status</th>
             <th>Payment Status</th>
         </tr>
-
+        </thead>
+        <tbody>
         {% for booking in bookings %}
         <tr>
             <td>{{ booking.user.name }}</td>
@@ -28,11 +32,12 @@
             <td>{{ booking.payment_status }}</td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
+    </div>
+    
     {% endif %}
 
-    <br>
-    <a href="{{ url_for('staff_dashboard') }}">Back to Dashboard</a>
+    <a href="{{ url_for('staff_dashboard') }}">← Back to Dashboard</a>
 
-</body>
-</html>
+{% endblock %}

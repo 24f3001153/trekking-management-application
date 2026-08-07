@@ -1,50 +1,51 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Staff Dashboard</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Trek Staff Dashboard</h1>
-    <p>Welcome {{ staff.user.name }}</p>
+{% block title %}Staff Dashboard{% endblock %}
 
-    <a href="{{ url_for('staff_profile') }}">Edit Profile</a> |
-    <a href="{{ url_for('logout') }}">Logout</a>
+{% block content %}
 
-    <br><br>
+    <h2 class="mb-2">Trek Staff Dashboard</h2>
+    <p class="fs-5 mb-4">Welcome, <strong>{{ staff.user.name }}</strong>!</p>
 
-    <h2>Assigned Treks</h2>
+    <a href="{{ url_for('staff_profile') }}" class="btn btn-secondary btn-sm mb-4">Edit Profile</a>
+
+    <h3 class="mb-3">Assigned Treks</h3>
 
     {% if not trek_data %}
-        <p>No treks assigned yet.</p>
+    <div class="card p-2 mb-4">
+        <p class="text-muted mb-0">No treks assigned yet.</p></div>
     {% else %}
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>Trek ID</th>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Available Slots</th>
-            <th>Status</th>
-            <th>Registered Trekkers</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for item in trek_data %}
-        <tr>
-            <td>{{ item.trek.id }}</td>
-            <td>{{ item.trek.trek_name }}</td>
-            <td>{{ item.trek.location }}</td>
-            <td>{{ item.trek.available_slots }}</td>
-            <td>{{ item.trek.status }}</td>
-            <td>{{ item.registered_count }}</td>
-            <td>
-                <a href="{{ url_for('staff_manage_trek', trek_id=item.trek.id) }}">Manage</a> |
-                <a href="{{ url_for('staff_view_participants', trek_id=item.trek.id) }}">View Participants</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Trek ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Available Slots</th>
+                    <th>Status</th>
+                    <th>Registered Trekkers</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in trek_data %}
+                <tr>
+                    <td>{{ item.trek.id }}</td>
+                    <td>{{ item.trek.trek_name }}</td>
+                    <td>{{ item.trek.location }}</td>
+                    <td>{{ item.trek.available_slots }}</td>
+                    <td>{{ item.trek.status }}</td>
+                    <td>{{ item.registered_count }}</td>
+                    <td>
+                        <a href="{{ url_for('staff_manage_trek', trek_id=item.trek.id) }}" class="btn btn-sm btn-primary">Manage</a>
+                        <a href="{{ url_for('staff_view_participants', trek_id=item.trek.id) }}" class="btn btn-sm btn-secondary">View Participants</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% endif %}
 
-</body>
-</html>
+{% endblock %}
