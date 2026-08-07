@@ -237,6 +237,14 @@ def admin_delete_trek(trek_id):
         return redirect(url_for("login"))
 
     trek = Trek.query.get_or_404(trek_id)
+    existing_bookings = Booking.query.filter_by(trek_id=trek.id).count()
+
+    if existing_bookings > 0:
+        return render_template(
+            "admin_treks.html",
+            treks=Trek.query.all(),
+            error="Cannot delete a trek with existing bookings. Consider marking it Closed or Completed instead."
+        )
 
     db.session.delete(trek)
     db.session.commit()
