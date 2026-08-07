@@ -124,7 +124,7 @@ A blacklisted staff member could still be approved, while remaining in the black
 
 **Resolution**
 
-A validation check was added to prevent approval of blacklisted staff members, and an **Activate** option was introduced to restore inactive staff when required.
+A validation check was added in the approve route to prevent approval of blacklisted staff members, and an **Activate** option was introduced to restore blacklisted staff members when required.
 
 ---
 
