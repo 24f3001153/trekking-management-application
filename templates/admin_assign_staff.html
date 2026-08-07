@@ -13,7 +13,7 @@
             {% if error %}
             <div class="alert alert-warning">{{ error }}</div>
             {% endif %}
-
+            {% if staff_list %}
             <form method="POST">
 
                 <div class="mb-3">
@@ -31,7 +31,7 @@
                 <button type="submit" class="btn btn-primary">Assign</button>
             </form>
 
-            {% if not staff_list %}
+            {% else %}
             <div class="card p-2 mb-4">
                 <p class="text-muted mb-0">No approved staff available. Approve staff first.</p>
             </div>
