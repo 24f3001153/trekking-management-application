@@ -1,43 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Dashboard</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Trekker Dashboard</h1>
-    <p>Welcome {{ user.name }}</p>
+{% block title %}Trekker Dashboard{% endblock %}
 
-    <a href="{{ url_for('user_browse_treks') }}">Browse Treks</a> |
-    <a href="{{ url_for('user_bookings') }}">My Bookings</a> |
-    <a href="{{ url_for('user_profile') }}">Edit Profile</a> |
-    <a href="{{ url_for('logout') }}">Logout</a>
+{% block content %}
 
-    <br><br>
+    <h2 class="mb-2">Trekker Dashboard</h2>
+    <p class="fs-5 mb-4">Welcome, <strong>{{ user.name }}</strong>!</p>
 
-    <h2>Currently Booked Treks</h2>
+    <div class="mb-4">
+        <a href="{{ url_for('user_browse_treks') }}" class="btn btn-primary">Browse Treks</a>
+        <a href="{{ url_for('user_bookings') }}" class="btn btn-secondary">My Bookings</a>
+        <a href="{{ url_for('user_profile') }}" class="btn btn-secondary">Edit Profile</a>
+    </div>
+
+    <h3 class="mb-3">Currently Booked Treks</h3>
 
     {% if not active_bookings %}
-        <p>You have no active bookings.</p>
+    <div class="card p-2 mb-4">
+        <p class="text-muted mb-0">You have no active bookings.</p>
+    </div>
     {% else %}
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>Trek</th>
-            <th>Location</th>
-            <th>Trek Status</th>
-            <th>Booking Date</th>
-        </tr>
-
-        {% for booking in active_bookings %}
-        <tr>
-            <td>{{ booking.trek.trek_name }}</td>
-            <td>{{ booking.trek.location }}</td>
-            <td>{{ booking.trek.status }}</td>
-            <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Trek</th>
+                    <th>Location</th>
+                    <th>Trek Status</th>
+                    <th>Booking Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in active_bookings %}
+                <tr>
+                    <td>{{ booking.trek.trek_name }}</td>
+                    <td>{{ booking.trek.location }}</td>
+                    <td>{{ booking.trek.status }}</td>
+                    <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% endif %}
 
-</body>
-</html>
+{% endblock %}
