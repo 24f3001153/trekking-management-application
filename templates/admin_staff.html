@@ -35,12 +35,14 @@
                     <td>{{ staff.approval_status }}</td>
                     <td>{{ staff.user.status }}</td>
                     <td>
-                        {% if staff.approval_status != 'Approved' %}
+                        {% if staff.approval_status != 'Approved' and staff.user.status != 'Blacklisted' %}
                         <a href="{{ url_for('admin_approve_staff', staff_id=staff.id) }}" class="btn btn-sm btn-primary">Approve</a>
                         {% endif %}
 
                         {% if staff.user.status != 'Blacklisted' %}
                         <a href="{{ url_for('admin_blacklist_staff', staff_id=staff.id) }}" class="btn btn-sm btn-outline-danger">Blacklist</a>
+                        {% else %}
+                        <a href="{{ url_for('admin_activate_staff', staff_id=staff.id) }}" class="btn btn-sm btn-primary">Activate</a>
                         {% endif %}
 
                         <a href="{{ url_for('admin_delete_staff', staff_id=staff.id) }}" class="btn btn-sm btn-danger">Remove</a>

@@ -322,7 +322,12 @@ def admin_approve_staff(staff_id):
         return redirect(url_for("login"))
 
     staff = StaffProfile.query.get_or_404(staff_id)
-
+    if staff.user.status == "Blacklisted":
+        return render_template(
+            "admin_staff.html",
+            staff_profiles=StaffProfile.query.all(),
+            error="Cannot approve a blacklisted staff member. Activate their account first."
+        )
     staff.approval_status = "Approved"
 
     db.session.commit()
@@ -339,6 +344,19 @@ def admin_blacklist_staff(staff_id):
     staff = StaffProfile.query.get_or_404(staff_id)
     staff.user.status = "Blacklisted"
     staff.approval_status = "Rejected"
+
+    db.session.commit()
+
+    return redirect(url_for("admin_staff"))
+
+@app.route("/admin/staff/activate/<int:staff_id>")
+def admin_activate_staff(staff_id):
+
+    if session.get("role") != "Admin":
+        return redirect(url_for("login"))
+
+    staff = StaffProfile.query.get_or_404(staff_id)
+    staff.user.status = "Active"
 
     db.session.commit()
 
