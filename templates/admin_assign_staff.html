@@ -1,38 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Assign Staff</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Assign Staff to: {{ trek.trek_name }}</h1>
+{% block title %}Assign Staff{% endblock %}
 
-    {% if error %}
-    <p style="color:red;">{{ error }}</p>
-    {% endif %}
+{% block content %}
 
-    <form method="POST">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+        <div class="card p-4">
+            <h2 class="mb-4">Assign Staff to: {{ trek.trek_name }}</h2>
+            <hr class="mt-0 mb-4">
 
-        <label>Select Staff:</label>
-        <select name="staff_id" required>
-            {% for staff in staff_list %}
-            <option value="{{ staff.id }}"
-                {% if trek.assigned_staff_id == staff.id %}selected{% endif %}>
-                {{ staff.user.name }} (ID: {{ staff.id }})
-            </option>
-            {% endfor %}
-        </select>
-        <br><br>
+            {% if error %}
+            <div class="alert alert-warning">{{ error }}</div>
+            {% endif %}
 
-        <button type="submit">Assign</button>
-    </form>
+            <form method="POST">
 
-    {% if not staff_list %}
-    <p>No approved staff available. Approve staff first.</p>
-    {% endif %}
+                <div class="mb-3">
+                    <label class="form-label">Select Staff</label>
+                    <select name="staff_id" class="form-select" required>
+                        {% for staff in staff_list %}
+                        <option value="{{ staff.id }}"
+                            {% if trek.assigned_staff_id == staff.id %}selected{% endif %}>
+                            {{ staff.user.name }} (ID: {{ staff.id }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-    <br>
-    <a href="{{ url_for('admin_treks') }}">Back to Treks</a>
+                <button type="submit" class="btn btn-primary">Assign</button>
+            </form>
 
-</body>
-</html>
+            {% if not staff_list %}
+            <div class="card p-2 mb-4">
+                <p class="text-muted mb-0">No approved staff available. Approve staff first.</p>
+            </div>
+            {% endif %}
+
+            <p class="mt-3">
+                <a href="{{ url_for('admin_treks') }}">← Back to Treks</a>
+            </p>
+        </div>
+        </div>
+    </div>
+
+{% endblock %}

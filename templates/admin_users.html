@@ -1,44 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Manage Users</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Manage Users</h1>
+{% block title %}Manage Users{% endblock %}
 
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>User ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Contact</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
+{% block content %}
 
-        {% for user in users %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.contact }}</td>
-            <td>{{ user.status }}</td>
-            <td>
-                {% if user.status != 'Blacklisted' %}
-                <a href="{{ url_for('admin_blacklist_user', user_id=user.id) }}">Blacklist</a> |
-                {% else %}
-                <a href="{{ url_for('admin_activate_user', user_id=user.id) }}">Activate</a> |
-                {% endif %}
+    <h2 class="mb-4">Manage Users</h2>
+{% if not users %}
+<div class="card p-2 mb-4">
+    <p class="text-muted mb-0">No users registered yet.</p>
+</div>
+{% else %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.contact }}</td>
+                    <td>{{ user.status }}</td>
+                    <td>
+                        {% if user.status != 'Blacklisted' %}
+                        <a href="{{ url_for('admin_blacklist_user', user_id=user.id) }}" class="btn btn-sm btn-outline-danger">Blacklist</a>
+                        {% else %}
+                        <a href="{{ url_for('admin_activate_user', user_id=user.id) }}" class="btn btn-sm btn-primary">Activate</a>
+                        {% endif %}
 
-                <a href="{{ url_for('admin_bookings', user_id=user.id) }}">View History</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+                        <a href="{{ url_for('admin_bookings', user_id=user.id) }}" class="btn btn-sm btn-secondary">View History</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+    <a href="{{ url_for('admin_dashboard') }}">← Back to Dashboard</a>
 
-    <br>
-    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
-
-</body>
-</html>
+{% endblock %}

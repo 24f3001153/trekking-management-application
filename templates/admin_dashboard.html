@@ -1,42 +1,67 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Dashboard</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Admin Dashboard</h1>
-    <p>Welcome Admin</p>
+{% block title %}Admin Dashboard{% endblock %}
 
-    <ul>
-        <li>Total Treks: {{ total_treks }}</li>
-        <li>Total Users: {{ total_users }}</li>
-        <li>Total Staff: {{ total_staff }}</li>
-        <li>Total Bookings: {{ total_bookings }}</li>
-    </ul>
+{% block content %}
 
-    <br>
+    <h2 class="mb-4">Admin Dashboard</h2>
 
-    <a href="{{ url_for('admin_treks') }}">Manage Treks</a> |
-    <a href="{{ url_for('admin_staff') }}">Manage Staff</a> |
-    <a href="{{ url_for('admin_users') }}">Manage Users</a> |
-    <a href="{{ url_for('admin_bookings') }}">View Bookings</a>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                <h5 class="card-title">{{ total_treks }}</h5>
+                <p class="card-text">Total Treks</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                <h5 class="card-title">{{ total_users }}</h5>
+                <p class="card-text">Total Users</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                <h5 class="card-title">{{ total_staff }}</h5>
+                <p class="card-text">Total Staff</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                <h5 class="card-title">{{ total_bookings }}</h5>
+                <p class="card-text">Total Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <br><br>
+    <div class="mb-4">
+        <a class="btn btn-primary" href="{{ url_for('admin_treks') }}">Manage Treks</a>
+        <a class="btn btn-primary" href="{{ url_for('admin_staff') }}">Manage Staff</a>
+        <a class="btn btn-primary" href="{{ url_for('admin_users') }}">Manage Users</a>
+        <a class="btn btn-primary" href="{{ url_for('admin_bookings') }}">View Bookings</a>
+    </div>
 
-    <form method="GET" action="{{ url_for('admin_search') }}">
-        <input type="text" name="q" placeholder="Search by name or ID">
-        <select name="type">
-            <option value="trek">Trek</option>
-            <option value="staff">Staff</option>
-            <option value="user">User</option>
-        </select>
-        <button type="submit">Search</button>
+    <form method="GET" action="{{ url_for('admin_search') }}" class="row g-2">
+        <div class="col-auto">
+            <input type="text" name="q" class="form-control" placeholder="Search by name or ID">
+        </div>
+        <div class="col-auto">
+            <select name="type" class="form-select">
+                <option value="trek">Trek</option>
+                <option value="staff">Staff</option>
+                <option value="user">User</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </div>
     </form>
 
-    <br>
-
-    <a href="{{ url_for('logout') }}">Logout</a>
-
-</body>
-</html>
+{% endblock %}
