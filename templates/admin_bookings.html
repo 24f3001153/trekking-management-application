@@ -8,24 +8,30 @@
 
     <form method="GET" action="{{ url_for('admin_bookings') }}" class="row g-2 mb-4">
         <div class="col-auto">
-            <label class="col-form-label">Filter by User ID:</label>
+            <label class="col-form-label">Filter by User ID or Name:</label>
         </div>
         <div class="col-auto">
-            <input type="text" name="user_id" class="form-control" value="{{ filter_user_id or '' }}" placeholder="User ID">
+            <input type="text" name="user_search" class="form-control" value="{{ user_search or '' }}" placeholder="User ID or Name">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-secondary">Filter</button>
         </div>
-        {% if filter_user_id %}
+        {% if user_search %}
         <div class="col-auto d-flex align-items-center">
             <a href="{{ url_for('admin_bookings') }}" class="btn btn-danger">Clear Filter</a>
         </div>
         {% endif %}
     </form>
 
-    {% if filter_user_id and not bookings %}
+    {% if user_search and not bookings %}
     <div class="card p-2 mb-4">
-    <p class="text-muted mb-0">No bookings found for User ID {{ filter_user_id }}.</p>
+   <p class="text-muted mb-0">
+    {% if user_search.isdigit() %}
+        No bookings found for User ID {{ user_search }}.
+    {% else %}
+        No bookings found for user "{{ user_search }}".
+    {% endif %}
+    </p>
     </div>
     {% else %}
 

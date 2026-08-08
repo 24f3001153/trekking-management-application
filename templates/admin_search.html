@@ -30,11 +30,29 @@
         <ul class="list-group">
         {% for item in results %}
             {% if results_type == 'trek' %}
-                <li class="list-group-item">ID {{ item.id }} - {{ item.trek_name }} ({{ item.location }}, {{ item.status }})</li>
+                <li class="list-group-item">
+            <strong>Trek ID:</strong> {{ item.id }} |
+            <strong>Name:</strong> {{ item.trek_name }} |
+            <strong>Location:</strong> {{ item.location }} |
+            <strong>Status:</strong> {{ item.status }} |
+            <strong>Available Slots:</strong> {{ item.available_slots }}
+            </li>
             {% elif results_type == 'staff' %}
-                <li class="list-group-item">Staff ID {{ item.id }} - {{ item.user.name }} ({{ item.approval_status }})</li>
+                <li class="list-group-item">
+            <strong>Staff ID:</strong> {{ item.id }} |
+            <strong>Name:</strong> {{ item.user.name }} |
+            <strong>Email:</strong> {{ item.user.email }} |
+            <strong>Contact:</strong> {{ item.user.contact }} |
+            <strong>Status:</strong> {{ item.user.status }}
+            </li>
             {% elif results_type == 'user' %}
-                <li class="list-group-item">User ID {{ item.id }} - {{ item.name }} ({{ item.status }})</li>
+                <li class="list-group-item">
+        <strong>User ID:</strong> {{ item.id }} |
+        <strong>Name:</strong> {{ item.name }} |
+        <strong>Email:</strong> {{ item.email }} |
+        <strong>Contact:</strong> {{ item.contact }} |
+        <strong>Status:</strong> {{ item.status }}
+        </li>
             {% endif %}
         {% endfor %}
         </ul>

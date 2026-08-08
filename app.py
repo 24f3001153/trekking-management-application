@@ -448,17 +448,21 @@ def admin_bookings():
     if session.get("role") != "Admin":
         return redirect(url_for("login"))
 
-    filter_user_id = request.args.get('user_id', '').strip()
+    user_search = request.args.get('user_search', '').strip()
+    query = Booking.query.join(User)
 
-    if filter_user_id:
-        bookings = Booking.query.filter_by(user_id=filter_user_id).all()
-    else:
-        bookings = Booking.query.all()
+    if user_search:
+        if user_search.isdigit():
+            query = query.filter(User.id == int(user_search))
+        else:
+            query = query.filter(User.name.ilike(f"%{user_search}%"))
+        
+    bookings = query.all()
 
     return render_template(
         "admin_bookings.html",
         bookings=bookings,
-        filter_user_id=filter_user_id
+        user_search=user_search
     )
 
 
