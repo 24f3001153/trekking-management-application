@@ -36,6 +36,7 @@
                     <th>Booking ID</th>
                     <th>User ID</th>
                     <th>User</th>
+                    <th> Email</th>
                     <th>Trek</th>
                     <th>Booking Date</th>
                     <th>Status</th>
@@ -48,6 +49,7 @@
                     <td>{{ booking.id }}</td>
                     <td>{{ booking.user.id }}</td>
                     <td>{{ booking.user.name }}</td>
+                    <td>{{ booking.user.email }}</td>
                     <td>{{ booking.trek.trek_name }}</td>
                     <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
                     <td>{{ booking.status }}</td>
