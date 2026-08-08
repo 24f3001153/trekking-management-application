@@ -67,7 +67,6 @@ cd trekking-management-application
  
 - The admin account is pre-created programmatically in `database.py` as required by the project specifications, using a hardcoded default credential for local development and grading purposes.
 - Bookings does have a Payment Status field, however, it is not implemented as payment handling wasn't part of the core requirements for this project.
-- `requirements.txt` reflects the full development environment. A few packages (eg. matplotlib, pandas, plotly) were installed for using in the optional Charts and Visualization milestone, but isn't implemented in this submission.
 
 ## Issues Encountered and Resolutions
 
